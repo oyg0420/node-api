@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const app = express();
 const bodyParser = require('body-parser');
+const _ = require('lodash');
 
 const users = [
   {id: 1, name: 'alice'},
@@ -59,6 +60,15 @@ app.delete('/users/:id', (req, res) => {
 
 app.post('/users', (req, res) => {
   const name = req.body.name;
+
+  if (!name) {
+    return res.status(400).end();
+  }
+
+  if (_.some(users, (u) => u.name === name)) {
+    return res.status(409).end();
+  }
+
   const id = Date.now();
   const user = { id, name };
   users.push(user);
