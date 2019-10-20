@@ -1,10 +1,4 @@
 .idea
 .idea/*
 node_modules/
-.byebug_history
-npm-debug.log
-build/
-public/bundle.js
-dump.rdb
 package-lock.json
-./webpack.config.dev.js
