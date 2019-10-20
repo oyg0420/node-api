@@ -127,6 +127,53 @@ describe('POST /users', () => {
   })
 });
 
+describe('PUT /users/:id', () => {
+  describe('성공시', () => {
+    it('변경된 name을 응답한다.', done => {
+      request(app)
+        .put('/users/3')
+        .send({ name: 'coo' })
+        .end((err, res) => {
+         res.body.should.have.property('name', 'coo');
+         done();
+      });
+    });
+  });
+
+  describe('실패시', () => {
+    it('정수가 아닌 id일 경우 400응답', (done) =>{
+      request(app)
+        .put('/users/one')
+        .expect(400)
+        .end(done);
+    });
+
+    it('name이 없는 경우 400 응답', (done) => {
+      request(app)
+        .put('/users/3')
+        .send({})
+        .expect(400)
+        .end(done);
+    });
+
+    it('없는 유저인 경우 404응답', (done) => {
+      request(app)
+        .put('/users/4')
+        .send({ name: 'kane' })
+        .expect(404)
+        .end(done);
+    });
+
+    it('이름이 중복일 경우 409 응답', (done) => {
+      request(app)
+        .put('/users/3')
+        .send({ name: 'alice' })
+        .expect(409)
+        .end(done);
+    });
+  });
+});
+
 
 
 

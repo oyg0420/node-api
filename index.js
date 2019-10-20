@@ -76,6 +76,22 @@ app.post('/users', (req, res) => {
   res.status(201).json(user);
 });
 
+app.put('/users/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  if (Number.isNaN(id)) return res.status(400).end();
+
+  const name = req.body.name;
+  if (!name) return res.status(400).end();
+
+  const user = users.filter(u => u.id === id)[0];
+  if (_.size(user) === 0) return res.status(404).end();
+  if (_.some(users, (u) => u.name === name)) return res.status(409).end();
+
+  user.name = name;
+
+  res.status(200).json(user);
+});
+
 app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
 });
